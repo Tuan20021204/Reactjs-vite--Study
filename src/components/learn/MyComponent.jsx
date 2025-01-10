@@ -8,7 +8,7 @@ const MyComponent = () => {
   const VAT = {
     name: `tuan`,
     age: 23
-  };
+  };// object
   return (
     <>
       <div> {JSON.stringify(VAT)} & Vu Anh Tuan </div>
