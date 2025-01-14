@@ -11,8 +11,8 @@ const App = () => {
     address: "hanoi",
     country: "vietnam"
   }
-  const addNewTodo = (name) => {
-    alert(`call me ${name}`)  
+  const addNewTodo = () => {
+    alert(`call me `)  
   }
 
   return (
