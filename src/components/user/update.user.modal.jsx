@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Input, notification, Modal } from 'antd';
-import { createUserApi, updateUserApi } from "../../services/api.service";
+import {  updateUserApi } from "../../services/api.service";
 
 const UpdateUserModal = (props) => {
     const [fullName, setFullName] = useState("");
@@ -29,7 +29,7 @@ const UpdateUserModal = (props) => {
             await loadUser();
         } else {
             notification.error({
-                message: "Error create user",
+                message: "Error update user",
                 description: JSON.stringify(res.message)
             })
         }
