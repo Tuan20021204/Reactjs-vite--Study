@@ -1,12 +1,64 @@
-import { Drawer } from "antd";
+import { Button, Drawer, notification } from "antd";
+import { useState } from "react";
+import { handleUploadFileApi, updateUserAvatarApi } from "../../services/api.service";
 
 const DetailUser = (props) => {
     const {
         dataDetail,
         setDataDetail,
         isDetailOpen,
-        setIsDetailOpen
+        setIsDetailOpen,
+        loadUser
     } = props;
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [preview, setPreview] = useState(null);
+
+    const handleUploadFile = (event) => {
+        if (!event.target.files || event.target.files.length === 0) {
+            setSelectedFile(null)
+            setPreview(null)
+            return
+        }
+
+        // I've kept this example simple by using the first image instead of multiple
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file)
+            setPreview(URL.createObjectURL(file))
+        }
+    }
+    const handleUpdateUserAvatar = async () => {
+        const resUpload = await handleUploadFileApi(selectedFile, "avatar");
+        if (resUpload.data) {
+            //success
+            const newAvatar = resUpload.data.fileUploaded
+            const resUpdateAvatar = await updateUserAvatarApi(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone)
+            if (resUpdateAvatar.data) {
+                setIsDetailOpen(false);
+                setSelectedFile(null);
+                setPreview(null);
+                await loadUser();
+
+                notification.success({
+                    message: "Uploaded",
+                    description: "Cap nhat thanh cong"
+                })
+            } else {
+                notification.error({
+                    message: "Error upload file",
+                    description: JSON.stringify(resUpdateAvatar.message)
+                })
+            }
+        } else {
+            notification.error({
+                message: "Error upload file",
+                description: JSON.stringify(resUpload.message)
+            })
+            return;
+        }
+
+    }
     return (
         <Drawer
             width={"60vw"}
@@ -24,12 +76,16 @@ const DetailUser = (props) => {
                 <p>Phone number: {dataDetail.phone}</p>
                 <br />
                 <p>Avatar:</p>
-                <div>
-                    <img height={250} width={300}
-                    src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataDetail.avatar}`}  />
+                <div style={{
+                    marginTop: "10px",
+                    height: "100px", width: "150px",
+                    border: "1px solid"
+                }}>
+                    <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                        src={`${import.meta.env.VITE_BACKEND_URL}/images/avatar/${dataDetail.avatar}`} />
                 </div>
                 <div>
-                    <label htmlFor="btnUpload"style={{
+                    <label htmlFor="btnUpload" style={{
                         display: "block",
                         width: "fit-content",
                         marginTop: "15px",
@@ -39,9 +95,28 @@ const DetailUser = (props) => {
                         cursor: "pointer",
                         color: "white"
                     }}>Upload Avatar</label>
-                    <input type="file" hidden id="btnUpload"/>
+                    <input type="file" hidden id="btnUpload"
+                        // onChange={handleUploadFile}
+                        onChange={(event) => handleUploadFile(event)}
+                    />
                 </div>
-                {/* <button type="primary">Upload Avatar</button> */}
+                {preview &&
+                    <>
+                        <div style={{
+                            marginTop: "10px",
+                            marginBottom: "10px",
+                            height: "100px", width: "150px",
+
+                        }}>
+                            <img style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                                src={preview} />
+                        </div>
+                        <Button
+                            type="primary"
+                            onClick={() => handleUpdateUserAvatar()}
+                        >Save</Button>
+                    </>
+                }
             </>
                 :
                 <>
