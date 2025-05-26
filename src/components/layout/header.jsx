@@ -1,5 +1,5 @@
 import { Menu } from 'antd';
-import { HomeOutlined, UserOutlined, BookOutlined } from '@ant-design/icons';
+import { HomeOutlined, UserOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link, NavLink } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -29,6 +29,21 @@ const Header = () => {
       icon: <BookOutlined />,
 
     },
+    {
+      label: 'Cai dat',
+      setting: 'setting',
+      icon: <SettingOutlined/>,
+      children: [
+        {
+          label: <Link to="/login">Dang Nhap </Link>,
+          key: 'login',
+        },
+        {
+          label: 'Dang Xuat',
+          key: 'logout',
+        },
+      ], 
+    }
 
   ];
   return (

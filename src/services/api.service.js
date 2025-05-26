@@ -41,11 +41,11 @@ const handleUploadFileApi = (file, folder) => {
         }
     }
     const bodyFormData = new FormData();
-    bodyFormData.append("fileImg" ,file)
+    bodyFormData.append("fileImg", file)
     return axios.post(URL_BACKEND, bodyFormData, config)
 }
 
-const updateUserAvatarApi = (avatar,_id, fullName, phone ) => {
+const updateUserAvatarApi = (avatar, _id, fullName, phone) => {
     const URL_BACKEND = "/api/v1/user"
     const data = {
         _id: _id,
@@ -55,6 +55,29 @@ const updateUserAvatarApi = (avatar,_id, fullName, phone ) => {
     }
     return axios.put(URL_BACKEND, data);
 }
+
+const registerApi = (fullName, email, password, phone) => {
+    const URL_BACKEND = "api/v1/user/register"
+    const data = {
+        fullName: fullName,
+        email: email,
+        password: password,
+        phone: phone
+    }
+    return axios.post(URL_BACKEND, data)
+}
+
+const loginApi = ( email, password) => {
+    const URL_BACKEND = "api/v1/auth/login"
+    const data = {      
+        username: email,
+        password: password,  
+        delay: 5000   
+        
+    }
+    return axios.post(URL_BACKEND, data)
+}
+
 export {
-    createUserApi, updateUserApi, fetchAllUserApi, deleteUserApi, handleUploadFileApi, updateUserAvatarApi
+    createUserApi, updateUserApi, fetchAllUserApi, deleteUserApi, handleUploadFileApi, updateUserAvatarApi, registerApi, loginApi
 }
