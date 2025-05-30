@@ -2,12 +2,14 @@ import { Button, Form, Input, notification, Row, Col, Divider } from "antd"
 import { loginApi } from "../services/api.service"
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useContext,useState } from "react";
+import { AuthContext } from "../components/context/auth.context";
 
 const LoginPage = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-     const navigate = useNavigate();
+    const navigate = useNavigate();
+    const { setUser } = useContext(AuthContext);
 
     const onFinish = async (values) => {
         setLoading(true);
@@ -16,8 +18,11 @@ const LoginPage = () => {
             notification.success({
                 message: "User Login",
                 description: "Dang nhap thanh cong"
+
             })
-             navigate("/");
+            setUser(res.data.user);
+            localStorage.setItem("access_token", res.data.access_token);
+            navigate("/");
         } else {
             notification.error({
                 message: "User Login",
@@ -45,7 +50,7 @@ const LoginPage = () => {
                         name="basic"
                         onFinish={onFinish}
                         style={{ margin: "10px" }}
-                    // onFinishFailed={onFinishFailed}
+                    // onFinishFailed={onFinishFailed} 
 
                     >
 
@@ -84,16 +89,16 @@ const LoginPage = () => {
 
 
 
-                        <div style ={{ 
-                            display: "flex", 
+                        <div style={{
+                            display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center"
-                            }}>
+                        }}>
                             <Button
                                 loading={loading}
                                 onClick={() => form.submit()}
                                 type="primary"> Login </Button>
-                            <Link to={"/"}>Go to Homepage <ArrowRightOutlined/>
+                            <Link to={"/"}>Go to Homepage <ArrowRightOutlined />
                             </Link>
                         </div>
 

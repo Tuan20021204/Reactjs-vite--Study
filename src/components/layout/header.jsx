@@ -1,12 +1,13 @@
 import { Menu } from 'antd';
 import { HomeOutlined, UserOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link, NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../context/auth.context';
 
 const Header = () => {
 
-
   const [current, setCurrent] = useState('');
+  const { user } = useContext(AuthContext);
   const onClick = e => {
     console.log('click ', e);
     setCurrent(e.key);
@@ -32,7 +33,7 @@ const Header = () => {
     {
       label: 'Cai dat',
       setting: 'setting',
-      icon: <SettingOutlined/>,
+      icon: <SettingOutlined />,
       children: [
         {
           label: <Link to="/login">Dang Nhap </Link>,
@@ -42,7 +43,7 @@ const Header = () => {
           label: 'Dang Xuat',
           key: 'logout',
         },
-      ], 
+      ],
     }
 
   ];
